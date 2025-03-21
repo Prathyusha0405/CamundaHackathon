@@ -27,11 +27,11 @@ public class ClaimDetails {
     private int Claim_Amount;
     private String Driver_License_Numer;
     private String Driver_Name;
-    @ElementCollection
-    private List<String> Is_Vehicle_Under_Loan=new ArrayList<>();
+    private boolean Is_Vehicle_Under_Loan;
     private String Milage_Run;
     private String Previous_Claim_Numbers;
     private String Vehicle_Manufacture;
     private String Vehicle_Model;
     private String Vehicle_Usage;
+    private String SSN_Number;
 }

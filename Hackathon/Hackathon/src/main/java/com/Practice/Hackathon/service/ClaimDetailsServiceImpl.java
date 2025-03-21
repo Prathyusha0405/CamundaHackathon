@@ -8,6 +8,7 @@ import com.Practice.Hackathon.model.PolicyDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -19,6 +20,7 @@ public class ClaimDetailsServiceImpl {
     private PolicyDetailsRepo policyDetailsRepo;
 
     public ClaimDetails saveCardDetails(ClaimDetails claimDetails) {
+        claimDetails.setDate(LocalDate.now());
         return timeEntryRepository.save(claimDetails);
     }
 

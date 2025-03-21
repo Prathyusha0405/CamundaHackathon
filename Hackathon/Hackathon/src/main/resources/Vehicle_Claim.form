@@ -1,0 +1,256 @@
+{
+  "components": [
+    {
+      "text": "# Vehicle Insurance Claim Details",
+      "type": "text",
+      "layout": {
+        "row": "Row_1k1loiw",
+        "columns": null
+      },
+      "id": "Field_1t8rxrb"
+    },
+    {
+      "label": "Name",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0rwbn57",
+        "columns": null
+      },
+      "id": "Field_1gc5lev",
+      "key": "Name",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Policy Number",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0rwbn57",
+        "columns": null
+      },
+      "id": "Field_1wluhnc",
+      "key": "PolicyNumber",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Phone Number",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0uh5nt9",
+        "columns": null
+      },
+      "id": "Field_0f1ah94",
+      "key": "PhoneNumber",
+      "validate": {
+        "required": true,
+        "validationType": "phone"
+      }
+    },
+    {
+      "label": "Email",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0uh5nt9",
+        "columns": null
+      },
+      "id": "Field_0mnpd3n",
+      "key": "Email",
+      "validate": {
+        "required": true,
+        "validationType": "email"
+      }
+    },
+    {
+      "label": "Address",
+      "type": "textarea",
+      "layout": {
+        "row": "Row_1dgs864",
+        "columns": 16
+      },
+      "id": "Field_05m57mz",
+      "key": "Address",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Driver Name",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0xiaxxz",
+        "columns": null
+      },
+      "id": "Field_1fxqhqi",
+      "key": "Driver_Name",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Driver License Numer",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0xiaxxz",
+        "columns": null
+      },
+      "id": "Field_0sr2i7k",
+      "key": "Driver_License_Numer",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Vehicle Manufacture",
+      "values": [
+        {
+          "label": "Value",
+          "value": "value"
+        }
+      ],
+      "type": "select",
+      "layout": {
+        "row": "Row_0dc59zd",
+        "columns": null
+      },
+      "id": "Field_1sbezyi",
+      "key": "Vehicle_Manufacture",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Vehicle Usage",
+      "values": [
+        {
+          "label": "Personal",
+          "value": "Personal"
+        },
+        {
+          "label": "Business",
+          "value": "Business"
+        }
+      ],
+      "type": "radio",
+      "layout": {
+        "row": "Row_0dc59zd",
+        "columns": null
+      },
+      "id": "Field_0xps0jw",
+      "key": "Vehicle_Usage",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Vehicle Model",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0dc59zd",
+        "columns": null
+      },
+      "id": "Field_0w5qqfv",
+      "key": "Vehicle_Model",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Average Km Run Per year",
+      "type": "number",
+      "layout": {
+        "row": "Row_0dc59zd",
+        "columns": null
+      },
+      "id": "Field_1kzw3af",
+      "key": "Average_Km_Run_Per_year",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Milage Run",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_0rjyd7z",
+        "columns": null
+      },
+      "id": "Field_04hkjea",
+      "key": "Milage_Run",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Is Vehicle Under Loan?",
+      "values": [
+        {
+          "label": "Yes",
+          "value": "Yes"
+        },
+        {
+          "label": "No",
+          "value": "No"
+        }
+      ],
+      "type": "checklist",
+      "layout": {
+        "row": "Row_0rjyd7z",
+        "columns": null
+      },
+      "id": "Field_07zga2u",
+      "key": "Is_Vehicle_Under_Loan",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Claim Amount",
+      "type": "number",
+      "layout": {
+        "row": "Row_12qngz8",
+        "columns": null
+      },
+      "id": "Field_0re20ua",
+      "key": "Claim_Amount",
+      "increment": "1000",
+      "validate": {
+        "required": true
+      }
+    },
+    {
+      "label": "Previous Claim Numbers(If any)",
+      "type": "textfield",
+      "layout": {
+        "row": "Row_12qngz8",
+        "columns": null
+      },
+      "id": "Field_0ys2i44",
+      "key": "Previous_Claim_Numbers"
+    },
+    {
+      "content": "<title>Multi-Document Upload</title>\n<form method=\"post\" enctype=\"multipart/form-data\">\n  <input type=\"file\" name=\"file\" accept=\"image/png, image/jpeg\" multiple>\n  <button type=\"submit\">Upload</button>\n</form>",
+      "type": "html",
+      "layout": {
+        "row": "Row_12qngz8",
+        "columns": null
+      },
+      "id": "Field_1g6ay02",
+      "conditional": {
+        "hide": "=Is_Vehicle_Under_Loan=\"No\""
+      },
+      "properties": {}
+    }
+  ],
+  "type": "default",
+  "id": "Vehicle_Claim",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.6.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.33.1"
+  },
+  "schemaVersion": 18
+}

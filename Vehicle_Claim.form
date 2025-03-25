@@ -1,0 +1,45 @@
+{
+  "components": [
+    {
+      "text": "# Vehicle Insurance Claim Details",
+      "type": "text",
+      "layout": {
+        "row": "Row_1k1loiw",
+        "columns": null
+      },
+      "id": "Field_1t8rxrb"
+    },
+    {
+      "label": "claimStatus",
+      "values": [
+        {
+          "label": "Approve",
+          "value": "Approve"
+        },
+        {
+          "label": "Reject",
+          "value": "Reject"
+        }
+      ],
+      "type": "radio",
+      "layout": {
+        "row": "Row_12qngz8",
+        "columns": null
+      },
+      "id": "Field_04i6cuu",
+      "key": "claimStatus",
+      "validate": {
+        "required": true
+      }
+    }
+  ],
+  "type": "default",
+  "id": "Vehicle_Claim",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.6.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.33.1"
+  },
+  "schemaVersion": 18
+}

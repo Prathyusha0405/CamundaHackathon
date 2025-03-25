@@ -6,133 +6,109 @@
 <title>Submit Claim</title>
 <style>
 
-        * {
+ /* General Styles */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Arial', sans-serif;
+    }
 
-            margin: 0;
+    body {
+        background: linear-gradient(to right, #6a11cb, #2575fc);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        padding: 20px;
+    }
 
-            padding: 0;
+    /* Form Container */
+    .container {
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        width: 90%;
+        max-width: 800px;
+        animation: fadeIn 0.8s ease-in-out;
+    }
 
-            box-sizing: border-box;
+    /* Heading */
+    h2 {
+        text-align: center;
+        color: #333;
+        font-size: 26px;
+        margin-bottom: 20px;
+    }
 
+    /* Form Layout using CSS Grid */
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .full-width {
+        grid-column: span 2;
+    }
+
+    /* Label Styles */
+    label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+        font-size: 14px;
+        color: #444;
+    }
+
+    /* Input & Select Styles */
+    input, select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 14px;
+        transition: 0.3s;
+    }
+
+    input:focus, select:focus {
+        border-color: #6a11cb;
+        box-shadow: 0 0 8px rgba(106, 17, 203, 0.5);
+        outline: none;
+    }
+
+    /* Submit Button */
+    button {
+        width: 100%;
+        background: linear-gradient(to right, #ff4b1f, #ff9068);
+        color: white;
+        padding: 14px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    button:hover {
+        background: linear-gradient(to right, #ff9068, #ff4b1f);
+        transform: scale(1.05);
+    }
+
+    /* Animation */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive Design */
+    @media screen and (max-width: 768px) {
+        .form-grid {
+            grid-template-columns: 1fr;
         }
- 
-        body {
-
-            font-family: Arial, sans-serif;
-
-            background-color: #f4f4f4;
-
-            display: flex;
-
-            justify-content: center;
-
-            align-items: center;
-
-            height: 100vh;
-
-            overflow: auto;
-
-        }
- 
-        /* Form Container Styling */
-
-        .container {
-
-            background: #fff;
-
-            padding: 25px;
-
-            border-radius: 10px;
-
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-
-            width: 80%; /* Increased form width */
-
-            max-width: 900px; /* Limiting max width */
-
-            margin: 20px;
-
-            overflow-y: auto; /* Allows scrolling within the form if needed */
-
-            height: auto;
-
-        }
- 
-        h2 {
-
-            text-align: center;
-
-            color: #333;
-
-            margin-bottom: 20px;
-
-        }
- 
-        label {
-
-            font-weight: bold;
-
-            display: block;
-
-            margin: 10px 0 5px;
-
-            font-size: 14px;
-
-        }
- 
-        input, select {
-
-            width: 100%;
-
-            padding: 12px;
-
-            margin-bottom: 15px;
-
-            border: 1px solid #ccc;
-
-            border-radius: 5px;
-
-            box-sizing: border-box;
-
-            font-size: 14px;
-
-        }
- 
-        button {
-
-            width: 100%;
-
-            background: #28a745;
-
-            color: white;
-
-            padding: 12px;
-
-            border: none;
-
-            border-radius: 5px;
-
-            cursor: pointer;
-
-            font-size: 16px;
-
-        }
- 
-        button:hover {
-
-            background: #218838;
-
-        }
- 
-        /* Scrollable area for the form */
-
-        .form-content {
-
-            max-height: 85vh; /* Ensures the form stays within view */
-
-            overflow-y: auto; /* Enables scrolling inside the form */
-
-        }
+    }
 </style>
 </head>
 <body>
@@ -155,8 +131,8 @@
                 <label for="PhoneNumber">PhoneNumber:</label>
 <input type="number" id="PhoneNumber" >
  
-                <label for="email">Email:</label>
-<input type="email" id="email" >
+                <label for="Email">Email:</label>
+<input type="email" id="Email" >
  
                 <label for="Driver_Name">Driver Name:</label>
 <input type="text" id="Driver_Name" >
@@ -207,29 +183,30 @@
 
         Name: document.getElementById("Name").value,
         Address: document.getElementById("Address").value,
-        PhoneNumber: document.getElementById("PhoneNumber").value, // Match backend field names
+		Email: document.getElementById("Email").value,
+        PhoneNumber: document.getElementById("PhoneNumber").value, 
         Driver_Name: document.getElementById("Driver_Name").value,
-        Driver_License_Numer: document.getElementById("Driver_License_Numer").value, // Fixed key name
-        Is_Vehicle_Under_Loan: document.getElementById("Is_Vehicle_Under_Loan").value === "Y", // Convert to boolean
+        Driver_License_Numer: document.getElementById("Driver_License_Numer").value,
+        Is_Vehicle_Under_Loan: document.getElementById("Is_Vehicle_Under_Loan").value === "Y",
         Average_Km_Run_Per_year: parseInt(document.getElementById("Average_Km_Run_Per_year").value),
         Vehicle_Usage: document.getElementById("Vehicle_Usage").value,
-        Vehicle_Manufacture: document.getElementById("Vehicle_Manufacture").value, // Match backend
+        Vehicle_Manufacture: document.getElementById("Vehicle_Manufacture").value, 
         Vehicle_Model: document.getElementById("Vehicle_Model").value,
-        Milage_Run: parseInt(document.getElementById("Milage_Run").value), // Convert to number
+        Milage_Run: parseInt(document.getElementById("Milage_Run").value), 
         Claim_Amount: parseInt(document.getElementById("Claim_Amount").value),
         Previous_Claim_Numbers: document.getElementById("Previous_Claim_Numbers").value
     };
 
     try {
-        const response = await fetch("http://localhost:8090/api/time-entries/Enter", { // Fixed endpoint
+        const response = await fetch("http://localhost:8090/api/time-entries/Enter", { 
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(formData)
         });
 
         if (response.ok) {
-            alert("Form Submitted Successfully!"); // Simple success popup
-            document.getElementById("claimForm").reset(); // Reset the form
+alert("Form Submitted Successfully!\n\n" + JSON.stringify(formData, null, 2));
+            document.getElementById("claimForm").reset(); 
         } else {
             alert("Submission failed. Please try again.");
         }

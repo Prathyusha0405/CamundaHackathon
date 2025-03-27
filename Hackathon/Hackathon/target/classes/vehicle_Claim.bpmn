@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0zhlype" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.33.1" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.7.0">
+  <bpmn:process id="Vehicle_Claim" name="Vehicle Claim" isExecutable="true">
+    <bpmn:laneSet id="LaneSet_1minxhp" />
+    <bpmn:startEvent id="Claim_Submited" name="Claim Submited">
+      <bpmn:outgoing>Flow_0t3uoql</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="Policy_Validity_Check" name="Policy Validity Check">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="PolicyCheck" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0t3uoql</bpmn:incoming>
+      <bpmn:outgoing>Flow_0oreowc</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_1ncabxn" name="Valid Policy?" default="Flow_14pxj7b">
+      <bpmn:incoming>Flow_0oreowc</bpmn:incoming>
+      <bpmn:outgoing>Flow_14pxj7b</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1cgse1e</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="Duplicate" name="Duplicate">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="DuplicateCheck" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1cgse1e</bpmn:incoming>
+      <bpmn:outgoing>Flow_130e6fm</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_14sguxp" name="Duplicate Claim?" default="Flow_0xlt7pn">
+      <bpmn:incoming>Flow_130e6fm</bpmn:incoming>
+      <bpmn:outgoing>Flow_17e01ah</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0xlt7pn</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="Creditability_Check" name="Creditability Check">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="CreditabilyCheck" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_17e01ah</bpmn:incoming>
+      <bpmn:outgoing>Flow_0baviby</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_1hscuds" name="Check Creditabily ?" default="Flow_0xlzu01">
+      <bpmn:incoming>Flow_0baviby</bpmn:incoming>
+      <bpmn:outgoing>Flow_11qtjpm</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0xlzu01</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="sent_Mail" name="Sent Mail">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="sendMail" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_14pxj7b</bpmn:incoming>
+      <bpmn:incoming>Flow_0xlt7pn</bpmn:incoming>
+      <bpmn:incoming>Flow_0xlzu01</bpmn:incoming>
+      <bpmn:outgoing>Flow_0l80xe3</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Claim_Rejected" name="Claim Rejected">
+      <bpmn:incoming>Flow_0l80xe3</bpmn:incoming>
+      <bpmn:incoming>Rejected</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="Sending_Mail_To_Approver" name="Sending Mail To Approver">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="sendMailToApprover" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0qz7i40</bpmn:incoming>
+      <bpmn:outgoing>Flow_01yapl2</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="Approver_Action" name="Approver Action">
+      <bpmn:extensionElements>
+        <zeebe:userTask />
+        <zeebe:formDefinition formId="Vehicle_Claim" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_01yapl2</bpmn:incoming>
+      <bpmn:outgoing>Flow_0jg6p74</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="Sending_Claim_Status" name="Sending Claim Status">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="claimStatus" retries="claimStatus" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0jg6p74</bpmn:incoming>
+      <bpmn:outgoing>Flow_1l2xfoq</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Recieved_Approved_Claim_Amount" name="Recieved Approved Claim Amount">
+      <bpmn:incoming>Flow_1jrk683</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:manualTask id="Dispurse_Claim" name="Dispurse Claim">
+      <bpmn:incoming>Flow_01zi8yi</bpmn:incoming>
+      <bpmn:outgoing>Flow_1jrk683</bpmn:outgoing>
+    </bpmn:manualTask>
+    <bpmn:exclusiveGateway id="Gateway_011x62e">
+      <bpmn:incoming>Flow_1l2xfoq</bpmn:incoming>
+      <bpmn:outgoing>Rejected</bpmn:outgoing>
+      <bpmn:outgoing>Flow_01zi8yi</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0oreowc" sourceRef="Policy_Validity_Check" targetRef="Gateway_1ncabxn" />
+    <bpmn:sequenceFlow id="Flow_14pxj7b" name="No" sourceRef="Gateway_1ncabxn" targetRef="sent_Mail" />
+    <bpmn:sequenceFlow id="Flow_1cgse1e" name="Yes" sourceRef="Gateway_1ncabxn" targetRef="Duplicate">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=validPolicy=true</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_130e6fm" sourceRef="Duplicate" targetRef="Gateway_14sguxp" />
+    <bpmn:sequenceFlow id="Flow_17e01ah" name="No" sourceRef="Gateway_14sguxp" targetRef="Creditability_Check">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=validDuplicateClaim=false</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0xlt7pn" name="Yes" sourceRef="Gateway_14sguxp" targetRef="sent_Mail" />
+    <bpmn:sequenceFlow id="Flow_0baviby" sourceRef="Creditability_Check" targetRef="Gateway_1hscuds" />
+    <bpmn:sequenceFlow id="Flow_11qtjpm" name="Yes" sourceRef="Gateway_1hscuds" targetRef="Approver_check">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=validSSN=true</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0xlzu01" name="No" sourceRef="Gateway_1hscuds" targetRef="sent_Mail" />
+    <bpmn:sequenceFlow id="Rejected" name="Rejected" sourceRef="Gateway_011x62e" targetRef="Claim_Rejected">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=claimStatus="Reject" or claimStatus="Refer back"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0l80xe3" sourceRef="sent_Mail" targetRef="Claim_Rejected" />
+    <bpmn:sequenceFlow id="Flow_01yapl2" sourceRef="Sending_Mail_To_Approver" targetRef="Approver_Action" />
+    <bpmn:sequenceFlow id="Flow_1l2xfoq" sourceRef="Sending_Claim_Status" targetRef="Gateway_011x62e" />
+    <bpmn:sequenceFlow id="Flow_0jg6p74" sourceRef="Approver_Action" targetRef="Sending_Claim_Status" />
+    <bpmn:businessRuleTask id="Approver_check" name="Approver Check">
+      <bpmn:extensionElements>
+        <zeebe:calledDecision decisionId="Approver_Check" resultVariable="role" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_11qtjpm</bpmn:incoming>
+      <bpmn:outgoing>Flow_0qz7i40</bpmn:outgoing>
+    </bpmn:businessRuleTask>
+    <bpmn:sequenceFlow id="Flow_0t3uoql" sourceRef="Claim_Submited" targetRef="Policy_Validity_Check" />
+    <bpmn:sequenceFlow id="Flow_0qz7i40" sourceRef="Approver_check" targetRef="Sending_Mail_To_Approver" />
+    <bpmn:sequenceFlow id="Flow_01zi8yi" sourceRef="Gateway_011x62e" targetRef="Dispurse_Claim">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=claimStatus="Approve"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1jrk683" sourceRef="Dispurse_Claim" targetRef="Recieved_Approved_Claim_Amount" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Vehicle_Claim">
+      <bpmndi:BPMNShape id="Activity_10wwtv1_di" bpmnElement="Policy_Validity_Check" bioc:stroke="#0d4372" bioc:fill="#bbdefb" color:background-color="#bbdefb" color:border-color="#0d4372">
+        <dc:Bounds x="700" y="560" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1hscuds_di" bpmnElement="Gateway_1hscuds" isMarkerVisible="true">
+        <dc:Bounds x="875" y="395" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="925.5" y="406.5" width="87" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_160insx_di" bpmnElement="Sending_Mail_To_Approver" bioc:stroke="#0d4372" bioc:fill="#bbdefb" color:background-color="#bbdefb" color:border-color="#0d4372">
+        <dc:Bounds x="670" y="230" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_16zen46_di" bpmnElement="Approver_Action" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="540" y="230" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ijvf6i_di" bpmnElement="Sending_Claim_Status" bioc:stroke="#0d4372" bioc:fill="#bbdefb" color:background-color="#bbdefb" color:border-color="#0d4372">
+        <dc:Bounds x="420" y="230" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_011x62e_di" bpmnElement="Gateway_011x62e" isMarkerVisible="true">
+        <dc:Bounds x="325" y="245" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="StartEvent_1_di" bpmnElement="Claim_Submited">
+        <dc:Bounds x="902" y="582" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="883" y="625" width="78" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1ncabxn_di" bpmnElement="Gateway_1ncabxn" isMarkerVisible="true">
+        <dc:Bounds x="245" y="395" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="173" y="413" width="62" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0wcqrju_di" bpmnElement="Dispurse_Claim" bioc:stroke="#205022" bioc:fill="#c8e6c9" color:background-color="#c8e6c9" color:border-color="#205022">
+        <dc:Bounds x="160" y="220" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1legxa7_di" bpmnElement="Approver_check" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="850" y="240" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_02rxnyg_di" bpmnElement="Recieved_Approved_Claim_Amount">
+        <dc:Bounds x="212" y="122" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="201" y="80" width="78" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_188flvu_di" bpmnElement="sent_Mail" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
+        <dc:Bounds x="1090" y="470" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_06wytoe_di" bpmnElement="Claim_Rejected">
+        <dc:Bounds x="1252" y="492" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1235" y="535" width="75" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_02r9gft_di" bpmnElement="Duplicate" bioc:stroke="#0d4372" bioc:fill="#bbdefb" color:background-color="#bbdefb" color:border-color="#0d4372">
+        <dc:Bounds x="380" y="380" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_14sguxp_di" bpmnElement="Gateway_14sguxp" isMarkerVisible="true">
+        <dc:Bounds x="555" y="395" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="528" y="373" width="84" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1tbb32l_di" bpmnElement="Creditability_Check" bioc:stroke="#0d4372" bioc:fill="#bbdefb" color:background-color="#bbdefb" color:border-color="#0d4372">
+        <dc:Bounds x="670" y="380" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0t3uoql_di" bpmnElement="Flow_0t3uoql">
+        <di:waypoint x="902" y="600" />
+        <di:waypoint x="800" y="600" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0oreowc_di" bpmnElement="Flow_0oreowc">
+        <di:waypoint x="700" y="600" />
+        <di:waypoint x="270" y="600" />
+        <di:waypoint x="270" y="445" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1cgse1e_di" bpmnElement="Flow_1cgse1e">
+        <di:waypoint x="295" y="420" />
+        <di:waypoint x="380" y="420" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="332" y="404" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_130e6fm_di" bpmnElement="Flow_130e6fm">
+        <di:waypoint x="480" y="420" />
+        <di:waypoint x="555" y="420" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_17e01ah_di" bpmnElement="Flow_17e01ah">
+        <di:waypoint x="605" y="420" />
+        <di:waypoint x="670" y="420" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="623" y="402" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0xlt7pn_di" bpmnElement="Flow_0xlt7pn">
+        <di:waypoint x="580" y="445" />
+        <di:waypoint x="580" y="510" />
+        <di:waypoint x="1090" y="510" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="587" y="471" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0baviby_di" bpmnElement="Flow_0baviby">
+        <di:waypoint x="770" y="420" />
+        <di:waypoint x="875" y="420" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11qtjpm_di" bpmnElement="Flow_11qtjpm">
+        <di:waypoint x="900" y="395" />
+        <di:waypoint x="900" y="320" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="893" y="349" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0xlzu01_di" bpmnElement="Flow_0xlzu01">
+        <di:waypoint x="900" y="445" />
+        <di:waypoint x="900" y="510" />
+        <di:waypoint x="1090" y="510" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="908" y="471" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0qz7i40_di" bpmnElement="Flow_0qz7i40">
+        <di:waypoint x="850" y="280" />
+        <di:waypoint x="800" y="280" />
+        <di:waypoint x="800" y="270" />
+        <di:waypoint x="770" y="270" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_01yapl2_di" bpmnElement="Flow_01yapl2">
+        <di:waypoint x="670" y="270" />
+        <di:waypoint x="640" y="270" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0jg6p74_di" bpmnElement="Flow_0jg6p74">
+        <di:waypoint x="540" y="270" />
+        <di:waypoint x="520" y="270" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1l2xfoq_di" bpmnElement="Flow_1l2xfoq">
+        <di:waypoint x="420" y="270" />
+        <di:waypoint x="375" y="270" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1vhxqva_di" bpmnElement="Rejected">
+        <di:waypoint x="350" y="240" />
+        <di:waypoint x="350" y="170" />
+        <di:waypoint x="1270" y="170" />
+        <di:waypoint x="1270" y="492" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="781" y="153" width="44" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_01zi8yi_di" bpmnElement="Flow_01zi8yi">
+        <di:waypoint x="325" y="270" />
+        <di:waypoint x="293" y="270" />
+        <di:waypoint x="293" y="260" />
+        <di:waypoint x="260" y="260" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_14pxj7b_di" bpmnElement="Flow_14pxj7b">
+        <di:waypoint x="270" y="445" />
+        <di:waypoint x="270" y="510" />
+        <di:waypoint x="1090" y="510" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="282" y="484" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1jrk683_di" bpmnElement="Flow_1jrk683">
+        <di:waypoint x="210" y="220" />
+        <di:waypoint x="210" y="189" />
+        <di:waypoint x="230" y="189" />
+        <di:waypoint x="230" y="158" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0l80xe3_di" bpmnElement="Flow_0l80xe3">
+        <di:waypoint x="1190" y="510" />
+        <di:waypoint x="1252" y="510" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
